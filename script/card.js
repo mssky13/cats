@@ -14,6 +14,8 @@ export class Card {
         this.#handleClickCatImage = handleClickCatImage;
     }
 
+  
+
     getElement() {
         this.#element = this.#getTemplate().cloneNode(true);
         const cardTitleElement = this.#element.querySelector('.card__name');

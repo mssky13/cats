@@ -8,15 +8,19 @@ import './utils.js';
 const cardsContainer = document.querySelector(".cards");
 const btnOpenPopup = document.querySelector("#add");
 const btnOpenPopupLogin = document.querySelector("#login");
-const formCatAdd = document.querySelector("#popup-form-add");
+const formCatAdd = document.querySelector("#popup-form-cat");
 const formLogin = document.querySelector("#popup-form-login");
 const isAuth = Cookies.get("email");
 const MAX_LIVE_STORAGE = 10;
 
 
+const PopupAddCat = new Popup("popup-add-cats");
+popupAddCats.setEventListener();
+
 const popupAdd = new Popup("popup-add");
 const popupImage = new PopupWithImage("popup-cat-image");
 const popupLogin = new Popup("popup-login");
+popupLogin.setEventListener();
 
 function serializeForm(elements) {
   const formData = {};
@@ -34,7 +38,7 @@ function serializeForm(elements) {
   return formData;
 }
 
-function createCat(dataCat){
+function createCat(dataCat) {
   const newElement = new Card(dataCat, "#card-template", handleClickCatImage);
   cardsContainer.prepend(newElement.getElement());
 }
