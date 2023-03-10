@@ -8,15 +8,35 @@ import './utils.js';
 const cardsContainer = document.querySelector(".cards");
 const btnOpenPopup = document.querySelector("#add");
 const btnOpenPopupLogin = document.querySelector("#login");
-const formCatAdd = document.querySelector("#popup-form-add");
+const formCatAdd = document.querySelector("#popup-form-cat");
 const formLogin = document.querySelector("#popup-form-login");
 const isAuth = Cookies.get("email");
 const MAX_LIVE_STORAGE = 10;
 
 
+const popupAddCat = new Popup("popup-add-cats");
+popupAddCat.setEventListener();
+
 const popupAdd = new Popup("popup-add");
-const popupImage = new PopupWithImage("popup-cat-image");
+popupAdd.setEventListener();
+
+const popupImage = new PopupWithImage("popup-cat-image")
+popupImage.setEventListener();
+
 const popupLogin = new Popup("popup-login");
+popupLogin.setEventListener();
+
+const popupCatInfo = new Popup("popup-cat-info");
+popupCatInfo.setEventListener();
+
+const popupCatImage = new PopupImage("popup-image");
+popupCatImage.setEventListener();
+
+const catsInfoInstanse = new CatsInfo(
+  'cats-info-template',
+)
+
+const catsInfoElement = catsInfoInstanse.getElement()
 
 function serializeForm(elements) {
   const formData = {};
@@ -34,8 +54,14 @@ function serializeForm(elements) {
   return formData;
 }
 
-function createCat(dataCat){
-  const newElement = new Card(dataCat, "#card-template", handleClickCatImage);
+function createCat(dataCat) {
+  const newElement = new Card(
+    dataCat,
+    "#card-template",
+    handleClickCatImage,
+    handleCatTitle,
+    handleCatImage,
+    );
   cardsContainer.prepend(newElement.getElement());
 }
 
@@ -131,6 +157,18 @@ function checkLocalStorage() {
   }
 }
 
+function handleCatTitle(cardInstance){
+
+  catsInfoInstanse.setData(cardInstance)
+
+  popupCatInfo.setContent(catsInfoElement);
+  popupCatInfo.open()
+}
+
+function handleCatImage(dataCard) {
+  popupCatImage.open(dataCard)
+}
+
 formCatAdd.addEventListener("submit", handleFormAddCat);
 formLogin.addEventListener("submit", handleFormLogin);
 
@@ -141,8 +179,6 @@ if(!isAuth) {
   btnOpenPopupLogin.classList.add('visually-hidden');
 }
 
-popupAdd.setEventListener();
-popupImage.setEventListener();
-popupLogin.setEventListener();
+
 
 checkLocalStorage()
