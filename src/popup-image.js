@@ -7,7 +7,7 @@ export class PopupWithImage extends Popup {
   
   open(data) {
     const imagePopup = this._popupElement.querySelector(".popup__image");
-    imagePopup.src = data.Image;
+    imagePopup.src = data.Image; //image or Image?
     super.open();
   }
   

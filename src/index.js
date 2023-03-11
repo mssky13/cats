@@ -34,6 +34,9 @@ popupCatImage.setEventListener();
 
 const catsInfoInstanse = new CatsInfo(
   'cats-info-template',
+   handleEditCatInfo,
+   handleLike,
+   handleCatDelete
 )
 
 const catsInfoElement = catsInfoInstanse.getElement()
@@ -61,6 +64,7 @@ function createCat(dataCat) {
     handleClickCatImage,
     handleCatTitle,
     handleCatImage,
+    handleLike
     );
   cardsContainer.prepend(newElement.getElement());
 }
@@ -94,17 +98,7 @@ function handleFormLogin(e){
   popupLogin.close()
 }
 
-btnOpenPopup.addEventListener("click", (e) => {
-  e.preventDefault();
-  popupAdd.open();
-});
-
-btnOpenPopupLogin.addEventListener("click", (e) => {
-  e.preventDefault();
-  popupLogin.open();
-});
-
-function setDataRefresh(minute, key){
+function setDataRefresh(minute, key) {
   const setTime = new Date(new Date().getTime() + minute*60000)
   localStorage.setItem(key, setTime);
   return setTime;
@@ -127,7 +121,7 @@ function updateLocalStorage(data, action) {
       localStorage.setItem('cats',  JSON.stringify(newStorage));
       return;
     case 'EDIT_CAT':
-      const updateStorage = oldStorage.map(cat => cat.id !== data.id ? cat : data) 
+      const updateStorage = oldStorage.map(cat => cat.id !== data.id ? cat : data) //или data : cat?
       localStorage.setItem('cats',  JSON.stringify(updateStorage));
       return;
     default:
@@ -157,10 +151,8 @@ function checkLocalStorage() {
   }
 }
 
-function handleCatTitle(cardInstance){
-
+function handleCatTitle(cardInstance) {
   catsInfoInstanse.setData(cardInstance)
-
   popupCatInfo.setContent(catsInfoElement);
   popupCatInfo.open()
 }
@@ -168,6 +160,51 @@ function handleCatTitle(cardInstance){
 function handleCatImage(dataCard) {
   popupCatImage.open(dataCard)
 }
+
+function handleLike(data, cardInstance) {
+  const {id, favourite} = data;
+  api.updateCatById(id, {favourite})
+  .then(() => {
+    if(cardInstance) {
+      cardInstance.setData(data);
+      cardInstance.updateView();
+    }
+    updateLocalStorage(data, {type: 'EDIT_CAT'});
+  })
+}
+
+function handleCatDelete(cardInstance) {
+  api.deleteCatById(cardInstance.getId())
+    .then(() => {
+      cardInstance.deleteView();
+
+       updateLocalStorage(cardInstance.getData(), {type: 'DELETE_CAT'});
+       popupCatInfo.close();
+    })
+}
+
+function handleEditCatInfo(cardInstance, data) {
+  const {age, description, name, id} = data;
+
+  api.updateCatById(id, {age, description, name})
+    .then(() => {
+      cardInstance.setData(data);
+      cardInstance.updateView();
+
+      updateLocalStorage(data, {type: 'EDIT_CAT'})
+      popupCatInfo.close();
+    })
+}
+
+btnOpenPopup.addEventListener("click", (e) => {
+  e.preventDefault();
+  popupAdd.open();
+});
+
+btnOpenPopupLogin.addEventListener("click", (e) => {
+  e.preventDefault();
+  popupLogin.open();
+});
 
 formCatAdd.addEventListener("submit", handleFormAddCat);
 formLogin.addEventListener("submit", handleFormLogin);
@@ -178,7 +215,5 @@ if(!isAuth) {
 } else {
   btnOpenPopupLogin.classList.add('visually-hidden');
 }
-
-
 
 checkLocalStorage()

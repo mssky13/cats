@@ -8,12 +8,27 @@ export class Card {
         return template
     }
 
-    constructor(data, selectorTemplate, handleClickCatImage, handleCatTitle, handleCatImage) {
-        this.#data = data;  // # or _?
+    constructor(data, selectorTemplate, handleClickCatImage, handleCatTitle, handleCatImage, handleLikeCard) {
+        this._data = data;  // # or _?
         this._handleCatTitle = handleCatTitle;
         this.#selectorTemplate = selectorTemplate;
         this.#handleClickCatImage = handleClickCatImage;
         this._handleCatImage = handleCatImage;
+        this._handleLikeCard = handleLikeCard;
+    }
+
+    
+    _updateViewLake() {
+        if(this._data.favourite) {
+            this.cardLikeElement.classList.add('card__like_active');
+        } else {
+            this.cardLikeElement.classList.remove('card__like_active');
+        }
+    }
+
+    _setLikeCat = () => {
+        this._data.favourite = !this._data.favourite;
+        this._handleLikeCard(this._data, this); // просто this?
     }
 
     getElement() {
@@ -22,16 +37,11 @@ export class Card {
         this.cardImageElement = this.#element.querySelector('.card__image');
         this.cardLikeElement = this.#element.querySelector('.card__like');
 
-        if(!this.#data.favourite) {
-            this.cardLikeElement.remove()
-        }
-
         this.cardLikeElement.addEventListener('click', () => {
-            this.#handleClickCatImage(this.#data.image);
+            this.#handleClickCatImage(this._data.image);
         })
-       
-        this.cardTitleElement.textContent = this.#data.name
-        this.cardImageElement.src = this.#data.image
+
+        this.updateView();
 
         this.setEventListener();
         return this.#element;
@@ -49,6 +59,13 @@ export class Card {
         this._data = newData; // # or _?
     }
 
+    updateView() {
+        this.cardTitleElement.textContent = this._data.name;
+        this.cardImageElement.src = this._data.image; //мои коты в базе под ключом image, в видео - img_link
+
+        this._updateViewLake();
+    }
+
     deleteView() {
         this.#element.remove(); // #?
         this.#element = null; // #?
@@ -57,6 +74,7 @@ export class Card {
     setEventListener() {
         this.cardTitleElement.addEventListener('click', () => this._handleCatTitle(this))
         this.cardImageElement.addEventListener('click', () => this._handleCatImage(this._data)) // # or _?
+        this.cardLikeElement.addEventListener('click', this._setLikeCat);
     }
 
 }
