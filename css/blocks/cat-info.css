@@ -15,7 +15,7 @@
 .cat-info__image {
     width: 100%;
     aspect-ratio: 4/3;
-    object-fit: cover;
+    object-fit: scale-down;
     grid-row: 1 / 5;
 }
 .cat-info__desc {

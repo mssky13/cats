@@ -9,7 +9,7 @@ export class Popup {
   }
 
   setContent(contentNode) {
-    const containerContent = this.popup.querySelector('.popup__content');
+    const containerContent = this._popupElement.querySelector('.popup__content');
     containerContent.innerHTML = '';
     containerContent.append(contentNode);
   }

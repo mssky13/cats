@@ -13,30 +13,6 @@ export function getCookie() {
     document.cookie = `${key}=;expires=${new Date(0)}`
   }
 
-  // export function setDataRefresh(minutes, key) {
-  //   const setTime = new Data(new Data().getTime() + minutes * 60000);
-  //   localStorage.setItem(key, setTime);
-  //   return setTime;
-  // }
-
-  // export function serializeForm(elements) {
-  //   const formData = {};
-
-  //   elements.forEach((input) => {
-  //     if (input.type === "submit") return;
-
-  //     if (input.type !== "checkbox") {
-  //       formData[input.name] = input.value;
-  //     }
-
-  //     if (input.type === "checkbox") {
-  //       formData[input.name] = input.checked;
-  //     }
-  //   });
-
-  //   return formData;
-  // }
-
   export const printNumerals = (number, titles) => {
     number = Math.abs(number);
     if (Number.isInteger(number)) {

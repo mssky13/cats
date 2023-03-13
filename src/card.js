@@ -1,5 +1,5 @@
 export class Card {
-    #data;
+    data;
     #selectorTemplate;
     #element;
     #handleClickCatImage;
@@ -9,7 +9,7 @@ export class Card {
     }
 
     constructor(data, selectorTemplate, handleClickCatImage, handleCatTitle, handleCatImage, handleLikeCard) {
-        this._data = data;  // # or _?
+        this._data = data;
         this._handleCatTitle = handleCatTitle;
         this.#selectorTemplate = selectorTemplate;
         this.#handleClickCatImage = handleClickCatImage;
@@ -48,20 +48,20 @@ export class Card {
     }
 
     getData() {
-        return this._data; // # or _?
+        return this._data;
     }
 
     getId() {
-        return this._data._id; // # or _?
+        return this._data._id;
     }
 
     setData(newData) {
-        this._data = newData; // # or _?
+        this._data = newData;
     }
 
     updateView() {
         this.cardTitleElement.textContent = this._data.name;
-        this.cardImageElement.src = this._data.image; //мои коты в базе под ключом image, в видео - img_link
+        this.cardImageElement.src = this._data.image;
 
         this._updateViewLake();
     }
@@ -73,7 +73,7 @@ export class Card {
 
     setEventListener() {
         this.cardTitleElement.addEventListener('click', () => this._handleCatTitle(this))
-        this.cardImageElement.addEventListener('click', () => this._handleCatImage(this._data)) // # or _?
+        this.cardImageElement.addEventListener('click', () => this._handleCatImage(this._data))
         this.cardLikeElement.addEventListener('click', this._setLikeCat);
     }
 

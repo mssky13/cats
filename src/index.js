@@ -1,5 +1,6 @@
 import { api } from './api.js';
 import { Card } from './card.js';
+import { CatsInfo } from './cats-info.js';
 import { cats } from './cats.js';
 import { PopupWithImage } from './popup-image.js';
 import { Popup } from './popup.js';
@@ -8,20 +9,17 @@ import './utils.js';
 const cardsContainer = document.querySelector(".cards");
 const btnOpenPopup = document.querySelector("#add");
 const btnOpenPopupLogin = document.querySelector("#login");
-const formCatAdd = document.querySelector("#popup-form-cat");
+const formCatAdd = document.querySelector("#popup-form-add");
 const formLogin = document.querySelector("#popup-form-login");
 const isAuth = Cookies.get("email");
 const MAX_LIVE_STORAGE = 10;
 
 
-const popupAddCat = new Popup("popup-add-cats");
+const popupAddCat = new Popup("popup-add");
 popupAddCat.setEventListener();
 
-const popupAdd = new Popup("popup-add");
-popupAdd.setEventListener();
-
-const popupImage = new PopupWithImage("popup-cat-image")
-popupImage.setEventListener();
+const popupCatImage = new PopupWithImage("popup-cat-image")
+popupCatImage.setEventListener();
 
 const popupLogin = new Popup("popup-login");
 popupLogin.setEventListener();
@@ -29,13 +27,10 @@ popupLogin.setEventListener();
 const popupCatInfo = new Popup("popup-cat-info");
 popupCatInfo.setEventListener();
 
-const popupCatImage = new PopupImage("popup-image");
-popupCatImage.setEventListener();
-
 const catsInfoInstanse = new CatsInfo(
-  'cats-info-template',
+  '#cats-info-template',
    handleEditCatInfo,
-   handleLike,
+   handleLike, 
    handleCatDelete
 )
 
@@ -77,7 +72,7 @@ function handleFormAddCat(e) {
     .then(function() {
       createCat(formData);
       updateLocalStorage(formData, {type: 'ADD_CAT'});
-      popupAdd.close();
+      popupAddCat.close();
     })
     .catch(function(err){
       console.log(err);
@@ -121,7 +116,7 @@ function updateLocalStorage(data, action) {
       localStorage.setItem('cats',  JSON.stringify(newStorage));
       return;
     case 'EDIT_CAT':
-      const updateStorage = oldStorage.map(cat => cat.id !== data.id ? cat : data) //или data : cat?
+      const updateStorage = oldStorage.map(cat => cat.id !== data.id ? data : cat)
       localStorage.setItem('cats',  JSON.stringify(updateStorage));
       return;
     default:
@@ -198,7 +193,7 @@ function handleEditCatInfo(cardInstance, data) {
 
 btnOpenPopup.addEventListener("click", (e) => {
   e.preventDefault();
-  popupAdd.open();
+  popupAddCat.open();
 });
 
 btnOpenPopupLogin.addEventListener("click", (e) => {
